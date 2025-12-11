@@ -21,12 +21,16 @@ class WebRTCManager {
     createPeerConnection() {
         console.log('Creating peer connection');
         this.peerConnection = new RTCPeerConnection(); // No ICE servers
+        this.iceGatheringComplete = false;
+        this.candidates = [];
 
         this.peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 console.log('ICE candidate generated:', event.candidate);
+                this.candidates.push(event.candidate);
             } else {
                 console.log('ICE gathering complete');
+                this.iceGatheringComplete = true;
             }
         };
 
@@ -65,7 +69,23 @@ class WebRTCManager {
         console.log('Setting local description for offer');
         await this.peerConnection.setLocalDescription(offer);
 
-        let sdp = offer.sdp;
+        // Wait for ICE gathering to complete
+        await new Promise(resolve => {
+            const check = () => {
+                if (this.iceGatheringComplete) {
+                    resolve();
+                } else {
+                    setTimeout(check, 100);
+                }
+            };
+            check();
+        });
+
+        let sdp = this.peerConnection.localDescription.sdp;
+        // Add candidates to SDP
+        if (this.candidates.length > 0) {
+            sdp += '\n' + this.candidates.map(c => 'a=' + c.candidate).join('\n');
+        }
         console.log('Original offer SDP:', sdp);
         sdp = sdp.split('\n').filter(line => !line.startsWith('a=max-message-size')).join('\n');
         console.log('Filtered offer SDP:', sdp);
@@ -94,7 +114,23 @@ class WebRTCManager {
         console.log('Setting local description for answer');
         await this.peerConnection.setLocalDescription(answer);
 
-        let sdp = answer.sdp;
+        // Wait for ICE gathering to complete
+        await new Promise(resolve => {
+            const check = () => {
+                if (this.iceGatheringComplete) {
+                    resolve();
+                } else {
+                    setTimeout(check, 100);
+                }
+            };
+            check();
+        });
+
+        let sdp = this.peerConnection.localDescription.sdp;
+        // Add candidates to SDP
+        if (this.candidates.length > 0) {
+            sdp += '\n' + this.candidates.map(c => 'a=' + c.candidate).join('\n');
+        }
         console.log('Original answer SDP:', sdp);
         sdp = sdp.split('\n').filter(line => !line.startsWith('a=max-message-size')).join('\n');
         console.log('Filtered answer SDP:', sdp);
@@ -153,18 +189,15 @@ class WebRTCManager {
     }
 
     getLocalIP() {
-        // Attempt to get local IP, but this may not work reliably
+        // Attempt to get local IP or address
         return new Promise((resolve) => {
             const pc = new RTCPeerConnection();
             pc.createDataChannel('');
             pc.createOffer().then(offer => pc.setLocalDescription(offer));
             pc.onicecandidate = (ice) => {
-                if (ice && ice.candidate && ice.candidate.candidate) {
-                    const ipMatch = ice.candidate.candidate.match(/(\d+\.\d+\.\d+\.\d+)/);
-                    if (ipMatch) {
-                        resolve(ipMatch[1]);
-                        pc.close();
-                    }
+                if (ice && ice.candidate && ice.candidate.address) {
+                    resolve(ice.candidate.address);
+                    pc.close();
                 }
             };
             setTimeout(() => {
