@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Text Share</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WebRTC Text Share</h1>
+        <div class="ip-input-section">
+            <label for="myIp">My IP (for cross-network, enter public IP; default is detected local):</label>
+            <input type="text" id="myIp">
+        </div>
+        <div class="status" id="status">Ready</div>
+        <button id="createInvite">Create Invite Link</button>
+        <div class="paste-invite-section">
+            <p>Or paste an invite link here:</p>
+            <input type="text" id="pasteInviteLink" placeholder="Paste invite link">
+            <button id="loadInvite">Load Invite</button>
+        </div>
+        <div class="invite-section" id="inviteSection" style="display: none;">
+            <p>Share this link with the other person:</p>
+            <input type="text" id="inviteLink" readonly>
+            <button id="copyLink">Copy Link</button>
+        </div>
+        <div class="sdp-section" id="sdpSection" style="display: none;">
+            <p>Paste the offer SDP here:</p>
+            <textarea id="offerSdp"></textarea>
+            <button id="connectOffer">Connect with Offer</button>
+        </div>
+        <div class="answer-section" id="answerSection" style="display: none;">
+            <p>Send this answer link to the initiator:</p>
+            <input type="text" id="answerLink" readonly>
+            <button id="copyAnswer">Copy Link</button>
+        </div>
+        <div class="paste-answer-link-section" id="pasteAnswerSection" style="display: none;">
+            <p>Paste the answer link here:</p>
+            <input type="text" id="pasteAnswerLink" placeholder="Paste answer link">
+            <button id="loadAnswer">Load Answer</button>
+        </div>
+        <div class="chat-section" id="chatSection" style="display: none;">
+            <textarea id="chat" placeholder="Type your message here..." readonly></textarea>
+            <input type="text" id="messageInput" placeholder="Enter message">
+            <button id="sendMessage">Send</button>
+        </div>
+        <div class="ip-section" id="ipSection" style="display: none;">
+            <p>If cross-network fails, share your local IP (for manual port forwarding):</p>
+            <input type="text" id="localIp" readonly>
+        </div>
+    </div>
+    <script src="js/webrtc.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

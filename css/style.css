@@ -1,0 +1,89 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.ip-input-section {
+    margin-bottom: 20px;
+}
+
+.ip-input-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.ip-input-section input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.status {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#chat {
+    height: 200px;
+    resize: none;
+}
+
+.paste-invite-section, .invite-section, .sdp-section, .answer-section, .paste-answer-link-section, .chat-section, .ip-section {
+    margin: 20px 0;
+}
+
+.invite-section p, .answer-section p, .ip-section p {
+    margin-bottom: 10px;
+}
